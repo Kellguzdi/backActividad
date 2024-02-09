@@ -22,7 +22,7 @@ public class LibroController {
     @Autowired
     private LibrosService service;
 
-    @GetMapping
+    @GetMapping("/")
     public List<Libros> getAllBooks() {
         return service.findAllBooks();
     }
