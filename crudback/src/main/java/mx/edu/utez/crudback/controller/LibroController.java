@@ -2,16 +2,12 @@ package mx.edu.utez.crudback.controller;
 
 import java.util.List;
 
+import jakarta.validation.Valid;
+import mx.edu.utez.crudback.utils.CustomResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import mx.edu.utez.crudback.model.Libros;
 import mx.edu.utez.crudback.service.LibrosService;
@@ -23,8 +19,8 @@ public class LibroController {
     private LibrosService service;
 
     @GetMapping("/")
-    public List<Libros> getAllBooks() {
-        return service.findAllBooks();
+    public CustomResponse<List<Libros>> getAll(){
+        return service.getAll();
     }
 
     @GetMapping("/{id}")
@@ -34,14 +30,24 @@ public class LibroController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @PostMapping
-    public Libros createBook(@RequestBody Libros book) {
-        return service.saveBook(book);
+    @PostMapping("/")
+    public CustomResponse<Libros> addNewProcedureType(@RequestBody Libros libros){
+        return service.insert(libros);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteBook(@PathVariable Long id) {
-        service.deleteBook(id);
+        service.delete(id);
         return ResponseEntity.ok().build();
+    }
+
+    //servicio para actualizar libro por id
+    @PutMapping("/{id}")
+    public ResponseEntity<Libros> update(@PathVariable Long id, @Valid @RequestBody Libros libros) {
+        if (!service.findBookById(id).isPresent()) {
+            return ResponseEntity.notFound().build();
+        }
+        libros.setId(id);
+        return ResponseEntity.ok(service.update(libros).getData());
     }
 }
