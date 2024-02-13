@@ -1,8 +1,5 @@
 package mx.edu.utez.crudback.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import jakarta.annotation.Generated;
-
 import jakarta.persistence.*;
 import lombok.Data;
 @Entity

@@ -2,7 +2,6 @@ package mx.edu.utez.crudback.service;
 
 import mx.edu.utez.crudback.model.Autor;
 import mx.edu.utez.crudback.model.AutorRepository;
-import mx.edu.utez.crudback.model.Libros;
 import mx.edu.utez.crudback.utils.CustomResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

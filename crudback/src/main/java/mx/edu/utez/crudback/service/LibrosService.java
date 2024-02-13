@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import mx.edu.utez.crudback.model.Libros;
 import mx.edu.utez.crudback.model.LibrosRepository;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestBody;
 
 @Service
 public class LibrosService {

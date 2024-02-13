@@ -6,7 +6,6 @@ import jakarta.validation.Valid;
 import mx.edu.utez.crudback.utils.CustomResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import mx.edu.utez.crudback.model.Libros;
@@ -14,6 +13,7 @@ import mx.edu.utez.crudback.service.LibrosService;
 
 @RestController
 @RequestMapping("/api/books")
+@CrossOrigin(origins = "http://localhost:5173")
 public class LibroController {
     @Autowired
     private LibrosService service;
