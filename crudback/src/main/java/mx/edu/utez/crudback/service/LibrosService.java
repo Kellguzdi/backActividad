@@ -1,6 +1,7 @@
 package mx.edu.utez.crudback.service;
 
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,6 +17,26 @@ import org.springframework.transaction.annotation.Transactional;
 public class LibrosService {
     @Autowired
     LibrosRepository repository;
+
+    public List<Libros> buscarPorNombre(String nombre) {
+        return repository.findByNombreContaining(nombre);
+    }
+
+    public List<Libros> buscarPorAutor(String autor) {
+        return repository.findByAutorNombre(autor);
+    }
+
+    public List<Libros> buscarPorFechas(Date inicio, Date fin) {
+        return repository.findByFechaPublicacionBetween(inicio, fin);
+    }
+
+    public List<Libros> buscarPorCategoria(String categoria) {
+        return repository.findByCategoria(categoria);
+    }
+
+    public List<Libros> buscarTodasOrdenadasPorFechaDesc() {
+        return repository.findAllByOrderByFechaPublicacionDesc();
+    }
 
     @Transactional(readOnly = true)
     public CustomResponse<List<Libros>> getAll(){
