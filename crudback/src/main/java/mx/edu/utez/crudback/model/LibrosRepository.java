@@ -8,13 +8,13 @@ import java.util.List;
 
 @Repository
 public interface LibrosRepository extends JpaRepository<Libros,Long>{
-    List<Libros> findByNombreContaining(String nombre);
+    List<Libros> findByTitleContaining(String nombre);
 
-    List<Libros> findByAutorNombre(String nombreAutor);
+    List<Libros> findByName(String nombreAutor);
 
-    List<Libros> findByFechaPublicacionBetween(Date fechaInicio, Date fechaFin);
+    List<Libros> findByIssueDateBetween(Date fechaInicio, Date fechaFin);
 
-    List<Libros> findByCategoria(String categoria);
+    List<Libros> findAllByCategoria(String categoria);
 
-    List<Libros> findAllByOrderByFechaPublicacionDesc();
+    List<Libros> findAllByOrderByIssueDateDesc();
 }

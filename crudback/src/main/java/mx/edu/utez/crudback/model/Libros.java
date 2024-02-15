@@ -2,6 +2,9 @@ package mx.edu.utez.crudback.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+
+import java.util.Date;
+
 @Entity
 @Table(name = "books")
 @Data
@@ -16,10 +19,9 @@ public class Libros {
     private String image;
 
     @Column(name = "issueDate", nullable = false)
-    private Integer issueDate;
+    private Date issueDate;
     @ManyToOne()
     @JoinColumn(name = "author_id")
-
     private Autor autor;
     @ManyToOne( )
     @JoinColumn(name = "genero_id")

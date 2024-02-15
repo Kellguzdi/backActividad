@@ -19,23 +19,23 @@ public class LibrosService {
     LibrosRepository repository;
 
     public List<Libros> buscarPorNombre(String nombre) {
-        return repository.findByNombreContaining(nombre);
+        return repository.findByTitleContaining(nombre);
     }
 
     public List<Libros> buscarPorAutor(String autor) {
-        return repository.findByAutorNombre(autor);
+        return repository.findByName(autor);
     }
 
     public List<Libros> buscarPorFechas(Date inicio, Date fin) {
-        return repository.findByFechaPublicacionBetween(inicio, fin);
+        return repository.findByIssueDateBetween(inicio, fin);
     }
 
     public List<Libros> buscarPorCategoria(String categoria) {
-        return repository.findByCategoria(categoria);
+        return repository.findAllByCategoria(categoria);
     }
 
     public List<Libros> buscarTodasOrdenadasPorFechaDesc() {
-        return repository.findAllByOrderByFechaPublicacionDesc();
+        return repository.findAllByOrderByIssueDateDesc();
     }
 
     @Transactional(readOnly = true)
