@@ -19,11 +19,11 @@ public class LibrosService {
     LibrosRepository repository;
 
     public List<Libros> buscarPorNombre(String nombre) {
-        return repository.findByTitleContaining(nombre);
+        return repository.findByTitleContainingIgnoreCase(nombre);
     }
 
     public List<Libros> buscarPorAutor(String autor) {
-        return repository.findByName(autor);
+        return repository.findAllByAutorNameIgnoreCase(autor);
     }
 
     public List<Libros> buscarPorFechas(Date inicio, Date fin) {
@@ -31,7 +31,7 @@ public class LibrosService {
     }
 
     public List<Libros> buscarPorCategoria(String categoria) {
-        return repository.findAllByCategoria(categoria);
+        return repository.findAllByCategoriaNameCategory(categoria);
     }
 
     public List<Libros> buscarTodasOrdenadasPorFechaDesc() {
