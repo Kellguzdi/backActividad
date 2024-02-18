@@ -10,7 +10,7 @@ import java.util.List;
 public interface LibrosRepository extends JpaRepository<Libros,Long>{
     List<Libros> findByTitleContainingIgnoreCase(String title);
 
-    List<Libros> findAllByAutorNameIgnoreCase(String nombreAutor);
+    List<Libros> findAllByAutorNameContainingIgnoreCase(String nombreAutor);
 
     List<Libros> findByIssueDateBetween(Date fechaInicio, Date fechaFin);
 

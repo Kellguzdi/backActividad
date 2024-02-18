@@ -17,6 +17,74 @@
       </b-col>
     </b-row>
     <ModalSpinner :isLoading="isLoading" />
+    <b-row class="justify-content-center mt-3">
+      <b-col cols="5" v-if="filter === 'title' || filter === 'author'">
+        <b-form-group label="Buscar libro:" label-for="searchInput">
+          <b-form-input
+            v-model="textFilter"
+            placeholder="Mil Noches"
+            type="text"
+            id="searchInput"
+            @input="getBooksByTitleOrAuthor()"
+          />
+        </b-form-group>
+      </b-col>
+      <b-col cols="5" v-else-if="filter === 'category'">
+        <b-form-group label="Buscar genero:" label-for="categorySelect">
+          <b-form-select
+            v-model="selectedCategory"
+            :options="categories"
+            value-field="nameCategory"
+            text-field="nameCategory"
+            id="categorySelect"
+            @change="getBooksByCategory()"
+          />
+        </b-form-group>
+      </b-col>
+      <b-row v-else-if="filter === 'dateRange'">
+        <b-col cols="4">
+          <b-form-group label="Año inicial:" label-for="inicialYear">
+            <b-form-input
+              v-model="fechaInicio"
+              type="number"
+              placeholder="2021"
+              id="inicialYear"
+            />
+          </b-form-group>
+        </b-col>
+        <b-col cols="4">
+          <b-form-group label="Año final:" label-for="finalYear">
+            <b-form-input
+              v-model="fechaFinal"
+              type="number"
+              placeholder="2024"
+              id="finalYear"
+            />
+          </b-form-group>
+        </b-col>
+        <b-col cols="4">
+          <b-form-group label="Filtrar entre años:" label-for="buttonFilter">
+            <b-button @click="getBooksByDateRange()">Buscar</b-button>
+          </b-form-group>
+        </b-col>
+      </b-row>
+      <b-col cols="5" v-else>
+        <b-form-group label="Order por año de publicación:">
+          <b-button @click="getBooksByDateDesc()"
+            >Odernar descendentemente</b-button
+          >
+        </b-form-group>
+      </b-col>
+      <b-col cols="5">
+        <b-form-group label="Realizar busqueda por:" label-for="searchSelect">
+          <b-form-select
+            v-model="filter"
+            :options="options"
+            id="searchSelect"
+          />
+        </b-form-group>
+      </b-col>
+    </b-row>
     <b-row class="justify-content-center" v-if="!isLoading">
       <b-card
         v-for="(book, index) in books"
@@ -41,7 +109,8 @@
                 {{ book.categoria && book.categoria.nameCategory }}</b-card-text
               >
               <b-card-text
-                >Año de publicación: {{ book.issueDate }}</b-card-text
+                >Año de publicación:
+                {{ formatDate(book.issueDate) }}</b-card-text
               >
             </b-col>
           </b-row>
@@ -68,6 +137,7 @@
 <script>
 import Vue from "vue";
 import bookService from "../books/Book";
+import categoriesService from "../categories/Category";
 
 export default Vue.extend({
   components: {
@@ -81,10 +151,24 @@ export default Vue.extend({
       isLoading: true,
       showButtonsIndex: null,
       selectedBook: null,
+      filter: "title",
+      options: [
+        { value: "title", text: "Título" },
+        { value: "author", text: "Autor" },
+        { value: "category", text: "Género" },
+        { value: "dateRange", text: "Rango de Fechas" },
+        { value: "dateDesc", text: "Fechas Descendentes" },
+      ],
+      selectedCategory: null,
+      fechaInicio: null,
+      fechaFinal: null,
+      categories: [],
+      textFilter: "",
     };
   },
   mounted() {
     this.getBooks();
+    this.getCategories();
   },
   methods: {
     async getBooks() {
@@ -97,6 +181,69 @@ export default Vue.extend({
         this.isLoading = false;
       }
     },
+    async getBooksByTitleOrAuthor() {
+      if (this.filter === "title") {
+        try {
+          const data = await bookService.getBooksByTitle(this.textFilter);
+          this.books = data;
+        } catch (error) {
+          console.log(error);
+        }
+      } else if (this.filter === "author") {
+        try {
+          const data = await bookService.getBooksByAuthor(this.textFilter);
+          this.books = data;
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    },
+    async getBooksByCategory() {
+      try {
+        const data = await bookService.getBooksByCategory(
+          this.selectedCategory
+        );
+        this.books = data;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async getBooksByDateRange() {
+      if (
+        this.fechaInicio !== null &&
+        this.fechaFinal !== null
+      ) {
+        try {
+          const initialDate = this.fechaInicio.toString() + "-01-01";
+          const finalDate = this.fechaFinal.toString() + "-12-31";
+          const data = await bookService.getBooksByDateBetween(
+            initialDate,
+            finalDate
+          );
+          this.books = data;
+        } catch (error) {
+          console.log(error);
+        }
+      } else {
+        console.log("los años no son validos");
+      }
+    },
+    async getBooksByDateDesc() {
+      try {
+        const data = await bookService.getBooksByDateDesc();
+        this.books = data;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async getCategories() {
+      try {
+        const data = await categoriesService.getCategories();
+        this.categories = data.data;
+      } catch (error) {
+        console.log(error);
+      }
+    },
     openAddBookModal() {
       this.$nextTick(() => {
         this.$bvModal.show("addBookModal");
@@ -104,6 +251,7 @@ export default Vue.extend({
     },
     openEditBookModal(book) {
       this.selectedBook = book;
+      this.selectedBook.issueDate = new Date(book.issueDate).getFullYear();
 
       this.$nextTick(() => {
         this.$bvModal.show("editBookModal");
@@ -126,6 +274,9 @@ export default Vue.extend({
       } catch (error) {
         console.log(error);
       }
+    },
+    formatDate(date) {
+      return new Date(date).getFullYear();
     },
   },
 });

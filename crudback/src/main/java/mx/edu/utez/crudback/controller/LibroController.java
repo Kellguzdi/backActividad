@@ -47,9 +47,8 @@ public class LibroController {
         return service.buscarTodasOrdenadasPorFechaDesc();
     }
 
-
     @GetMapping("/")
-    public CustomResponse<List<Libros>> getAll(){
+    public CustomResponse<List<Libros>> getAll() {
         return service.getAll();
     }
 
@@ -61,7 +60,7 @@ public class LibroController {
     }
 
     @PostMapping("/")
-    public CustomResponse<Libros> addNewProcedureType(@RequestBody Libros libros){
+    public CustomResponse<Libros> addNewProcedureType(@RequestBody Libros libros) {
         return service.insert(libros);
     }
 
@@ -71,7 +70,7 @@ public class LibroController {
         return ResponseEntity.ok().build();
     }
 
-    //servicio para actualizar libro por id
+    // servicio para actualizar libro por id
     @PutMapping("/{id}")
     public ResponseEntity<Libros> update(@PathVariable Long id, @Valid @RequestBody Libros libros) {
         if (!service.findBookById(id).isPresent()) {

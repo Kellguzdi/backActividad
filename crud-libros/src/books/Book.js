@@ -11,9 +11,60 @@ const getBooks = async () => {
   }
 };
 
+const getBooksByTitle = async (nombre) => {
+  try {
+    const response = await axios.get(
+      `${API_URL}buscarPorNombre?nombre=${nombre}`
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const getBooksByAuthor = async (autor) => {
+  try {
+    const response = await axios.get(`${API_URL}buscarPorAutor?autor=${autor}`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const getBooksByCategory = async (categoria) => {
+  try {
+    const response = await axios.get(
+      `${API_URL}buscarPorCategoria?categoria=${categoria}`
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const getBooksByDateBetween = async (inicio, fin) => {
+  try {
+    const response = await axios.get(
+      `${API_URL}buscarPorFechas?inicio=${inicio}&fin=${fin}`
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const getBooksByDateDesc = async () => {
+  try {
+    const response = await axios.get(API_URL + "ordenadasPorFechaDesc");
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 const getBook = async (id) => {
   try {
-    const response = await axios.get(A`/${id}`);
+    const response = await axios.get(`${API_URL}/${id}`);
     return response.data;
   } catch (error) {
     throw error;
@@ -50,6 +101,11 @@ const deleteBook = async (id) => {
 
 export default {
   getBooks,
+  getBooksByTitle,
+  getBooksByAuthor,
+  getBooksByCategory,
+  getBooksByDateBetween,
+  getBooksByDateDesc,
   getBook,
   addBook,
   updateBook,

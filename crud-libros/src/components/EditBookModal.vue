@@ -80,6 +80,8 @@ export default Vue.extend({
     async editBook() {
       this.isLoading = true;
       try {
+        const publicationDate = new Date(this.book.issueDate, 0, 1);
+        this.book.issueDate = publicationDate;
         const response = await bookService.updateBook(this.book);
 
         if (!response.error) {

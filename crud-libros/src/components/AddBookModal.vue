@@ -91,6 +91,8 @@ export default Vue.extend({
     async addBook() {
       this.isLoading = true;
       try {
+        const publicationDate = new Date(this.newBook.issueDate, 0, 1);
+        this.newBook.issueDate = publicationDate;
         const response = await bookService.addBook(this.newBook);
 
         if (!response.error) {

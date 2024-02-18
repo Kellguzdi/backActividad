@@ -23,7 +23,7 @@ public class LibrosService {
     }
 
     public List<Libros> buscarPorAutor(String autor) {
-        return repository.findAllByAutorNameIgnoreCase(autor);
+        return repository.findAllByAutorNameContainingIgnoreCase(autor);
     }
 
     public List<Libros> buscarPorFechas(Date inicio, Date fin) {
